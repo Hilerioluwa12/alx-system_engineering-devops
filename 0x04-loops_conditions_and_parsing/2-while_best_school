@@ -1,0 +1,9 @@
+#!/usr/bin/env bash
+# This script to print string 10 times
+
+y=0
+while [ $y -lt 10 ];
+do
+	echo "Best School"
+	let y+=1
+done
