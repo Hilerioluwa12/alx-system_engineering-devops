@@ -1,9 +1,9 @@
 #!/usr/bin/env bash
 #script to print string 10 times
 
-y=0
-while [ $y -lt 10 ];
+i=0
+while [ $i -lt 10 ];
 do
 	echo "Best School"
-	let y+=1
+	let i+=1
 done
