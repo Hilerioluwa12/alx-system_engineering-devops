@@ -1,0 +1,9 @@
+#!/usr/bin/env bash
+#script to print string 10 times
+
+y=1
+until [ $y -gt 10 ];
+do
+	echo "Best School"
+	((y++));
+done       
