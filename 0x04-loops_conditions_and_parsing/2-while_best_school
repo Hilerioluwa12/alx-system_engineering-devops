@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-# This script to print string 10 times
+#script to print string 10 times
 
 y=0
 while [ $y -lt 10 ];
