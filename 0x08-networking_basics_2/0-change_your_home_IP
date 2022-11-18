@@ -1,4 +1,4 @@
-#!/usr/env bash
+#!/usr/bin/env bash
 # script to change localhost addresses
 
 cp /etc/hosts ~/hosts.new
