@@ -1,27 +1,19 @@
 #!/usr/bin/env bash
-# add a HTTP Header and keep the configuration
-# https://www.digitalocean.com/community/tutorials/how-to-configure-nginx-to-use-custom-error-pages-on-ubuntu-14-04
-# configure a new nginx web server
-# install the Nginx
-sudo apt-get -y update
-sudo apt-get -y install nginx
-# enable pass of traffic in the port 80
-sudo ufw allow 'Nginx HTTP'
-# redirect
-var="server_name _;\n\trewrite ^\/redirect_me https:\/\/www.youtube.com\/watch?v=QH2-TGUlwu4 permanent;"
-cd /etc/nginx/sites-available/
-sudo sed -i "s/server_name _;/$var/" default
-cd -
-# adding message to 404 not found
-echo -e "Ceci n'est pas une page\n" | sudo tee /var/www/html/404_page.html
-# adding a new line inside /etc/nginx/sites-available/default
-var404="server_name _;\n\terror_page 404 \/404_page.html;\n\tlocation = \/404_page.html {\n\t\troot \/var\/www\/html;\n\t\tinternal;\n\t}"
-cd /etc/nginx/sites-available/
-sudo sed -i "s/server_name _;/$var404/" default
-cd -
-# restart Nginx service for get changes
-name=$HOSTNAME
-# configure the file nginx.conf in order the set the header
-sudo sed -i "s/include \/etc\/nginx\/sites-enabled\/\*;/include \/etc\/nginx\/sites-enabled\/\*;\n\t# Adding Header/" /etc/nginx/nginx.conf
-sudo sed -i "s/# Adding Header/# Adding Header \n\tadd_header X-Served-By $name;/" /etc/nginx/nginx.conf
+#Configure your Nginx server to have a custom 404 page that contains the string
+
+sudo apt-get update
+sudo apt-get install -y nginx
+
+# code to redirect a specific endpoint (eg: redirect /redirect_me to https://blog.ehoneahobed.com)
+echo "Hello Worild!" | sudo tee /var/www/html/index.html
+string_for_replacement="server_name _;\n\trewrite ^\/redirect_me https:\/\/www.blog.ehoneahobed.com permanent;"
+sudo sed -i "s/server_name _;/$string_for_replacement/" /etc/nginx/sites-enabled/default
+
+# code to create error page and add a redirect for error 404
+echo "Ceci n'est pas une page" | sudo tee /var/www/html/error_404.html
+string_for_replacement="listen 80 default_server;\n\terror_page 404 \/error_404.html;\n\tlocation = \/error_404.html {\n\t\troot \/var\/www\/html;\n\t\tinternal;\n\t}"
+sudo sed -i "s/listen 80 default_server;/$string_for_replacement/" /etc/nginx/sites-enabled/default
+
+sed -i "s/include \/etc\/nginx\/sites-enabled\/\*;/include \/etc\/nginx\/sites-enabled\/\*;\n\tadd_header X-Served-By \"$HOSTNAME\";/" /etc/nginx/nginx.conf
+# restart the server
 sudo service nginx restart
